@@ -1,8 +1,9 @@
 import time
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
+import os
 
-extentions = {"pictures" : ["jpg","png","gif"] , "documents" : ["pdf", "docx", "ppt"],
+extentions = {"pictures" : ["jpg", "mkv","png","gif"] , "documents" : ["pdf", "docx", "ppt"],
 "executable" : ["exe" , "sh", "cpp" , "py"]}
 
 def on_create(event):
@@ -20,7 +21,10 @@ def on_create(event):
 				break
 			count += 1
 		if flag:
-			print(f" file : {list(extentions.keys())[count]} ")
+			dest = "/home/bitbyte/python-master/wt/" + str(list(extentions.keys())[count])
+			print(f" file : {dest} ")
+			os.system(f"mv {path} {dest}")
+
 
 
 '''
@@ -44,9 +48,9 @@ if __name__ == "__main__":
     my_event_handler = PatternMatchingEventHandler(patterns,ignore_patterns,ignore_directories,case_sensitive)
 
     my_event_handler.on_created = on_create
-    my_event_handler.on_deleted = on_delete
-    my_event_handler.on_modified = on_modified
-    my_event_handler.on_moved = on_moved
+    #my_event_handler.on_deleted = on_delete
+    #my_event_handler.on_modified = on_modified
+    #my_event_handler.on_moved = on_moved
 
     path = "/home/bitbyte/python-master/wt"
     go_recv = False
@@ -56,7 +60,7 @@ if __name__ == "__main__":
     my_observer.start()
     try:
     	while True:
-    		time.sleep(1)
+    		time.sleep(10)
     except 	KeyboardInterrupt:
     	my_observer.stop()
     	my_observer.join()
